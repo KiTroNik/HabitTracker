@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session, flash
+from flask import Blueprint, render_template, redirect, url_for, session, flash
 from functools import wraps
 from .forms import LoginForm, RegisterForm
 
