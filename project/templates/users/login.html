@@ -1,4 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Hello World</h1>
+    <form method="post" action="/">
+        {{ form.csrf_token }}
+        <div class="input-group">
+            {{ form.username(placeholder="Username") }}
+            <span class="error">
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </span>
+        </div>
+        <div class="input-group">
+            {{ form.password(placeholder="Password") }}
+            <span class="error">
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </span>
+        </div>
+        <button type="submit">Sign in</button>
+        <br>
+        <br>
+        <p>Need an account? <a href="/register/">Signup</a></p>
+    </form>
 {% endblock %}
