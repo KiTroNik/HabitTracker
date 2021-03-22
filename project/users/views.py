@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from .forms import LoginForm, RegisterForm
 from project.models import User
 from project import bcrypt, db
@@ -11,6 +11,14 @@ users_blueprint = Blueprint('users', __name__)
 @users_blueprint.route('/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if request.method == 'POST' and form.validate():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is not None and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash('Welcome!')
+            return redirect(url_for('habits.habits'))
+        else:
+            flash('Invalid username or password')
     return render_template('users/login.html', form=form)
 
 
@@ -38,4 +46,5 @@ def register():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    flash('Successfully logged out.')
+    return redirect(url_for('users.login'))
