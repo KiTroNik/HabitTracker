@@ -19,3 +19,4 @@ class TestUser:
     def test_login_page_shows(self, client):
         response = client.get('/')
         assert response.status_code == 200
+        assert b'Please log in to access your habits' in response.data
