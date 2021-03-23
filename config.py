@@ -20,4 +20,8 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
+    basedir = os.path.abspath(os.path.dirname(__file__))
     TESTING = True
+    WTF_CSRF_ENABLED = False
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'test.db')
