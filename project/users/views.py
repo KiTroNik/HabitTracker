@@ -11,10 +11,11 @@ users_blueprint = Blueprint('users', __name__)
 @users_blueprint.route('/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    remember = True if form.remember_me.data else False
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(username=form.username.data).first()
         if user is not None and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user)
+            login_user(user, remember=remember)
             flash('Welcome!')
             return redirect(url_for('habits.habits'))
         else:
