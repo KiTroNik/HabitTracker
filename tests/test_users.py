@@ -86,3 +86,13 @@ class TestUser:
     def test_not_logged_users_cant_logout(self, client):
         response = logout(client)
         assert b'Goodbye.' not in response.data
+
+    def test_string_representation_of_user(self, client):
+        db.session.add(User(
+            'Johnny',
+            'john@doe.com',
+            'secret'
+        ))
+        db.session.commit()
+        user = User.query.filter_by(username='Johnny').first()
+        assert user.__repr__() == "<User 'Johnny'>"
