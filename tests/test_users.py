@@ -40,7 +40,7 @@ class TestUser:
     def test_login_page_shows(self, client):
         response = client.get('/login/')
         assert response.status_code == 200
-        assert b'Please log in to access your habits' in response.data
+        assert b'Remember me' in response.data
 
     def test_login_form_validates_input(self, client):
         response = login(client, 'foo', 'bar')
@@ -66,7 +66,7 @@ class TestUser:
     def test_register_page_shows(self, client):
         response = client.get('/register/', follow_redirects=True)
         assert response.status_code == 200
-        assert b'Already registered?' in response.data
+        assert b'Signup' in response.data
 
     def test_user_can_register(self, client):
         response = register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')

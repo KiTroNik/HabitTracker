@@ -14,12 +14,12 @@ def client():
 
 
 class TestErrors:
-    def test_setup(self, client):
-        response = client.get('/login/', follow_redirects=True)
+    def test_home_page_shows(self, client):
+        response = client.get('/')
         assert response.status_code == 200
-        assert b'Please log in to access your habits' in response.data
+        assert b'Welcome to Habit Tracker' in response.data
 
     def test_404_error_renders_proper(self, client):
         response = client.get('/not_exists', follow_redirects=True)
         assert response.status_code == 404
-        assert b'What you were looking for is just not there.' in response.data
+        assert b'What you were looking for is just not here.' in response.data
