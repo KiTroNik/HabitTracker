@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from config import DevelopmentConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -25,3 +25,14 @@ from project.habits.views import habits_blueprint
 
 app.register_blueprint(users_blueprint)
 app.register_blueprint(habits_blueprint)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    return render_template('errors/500.html'), 500
+
