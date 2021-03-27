@@ -14,7 +14,7 @@ def client():
 
 
 def login(client, username, password):
-    return client.post('/', data=dict(username=username, password=password), follow_redirects=True)
+    return client.post('/login/', data=dict(username=username, password=password), follow_redirects=True)
 
 
 def register(client, username, email, password, confirm):
@@ -38,14 +38,14 @@ def create_user(username, email, password):
 
 class TestUser:
     def test_login_page_shows(self, client):
-        response = client.get('/')
+        response = client.get('/login/')
         assert response.status_code == 200
         assert b'Please log in to access your habits' in response.data
 
     def test_login_form_validates_input(self, client):
         response = login(client, 'foo', 'bar')
         assert b'Field must be between 4 and 40 characters long.' in response.data
-        response = client.post('/', data=dict(username='', password='siema'), follow_redirects=True)
+        response = client.post('/login/', data=dict(username='', password='siema'), follow_redirects=True)
         assert b'This field is required.' in response.data
 
     def test_unregistered_user_cant_login(self, client):

@@ -1,50 +1,62 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method="post" action="/register/">
-        {{ form.csrf_token }}
-        <div class="input-group">
-            {{ form.username(placeholder="Username") }}
-            <span class="error">
-                {% if form.username.errors %}
-                    {% for error in form.username.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
+    <div class="modal-dialog text-center">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        <div class="col-sm-8 main-section">
+            <div class="modal-content">
+
+                <div class="col-12 user-img">
+                    <img src="{{ url_for('static', filename='img/face.png') }}">
+                </div>
+
+                <form class="col-12" method="post" action="/register/">
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        {{ form.username(placeholder="Enter Username", class_="form-control") }}
+                        <span class="error">
+                            {% if form.username.errors %}
+                                {% for error in form.username.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        {{ form.email(placeholder="Enter Email", class_="form-control") }}
+                        <span class="error">
+                            {% if form.email.errors %}
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        {{ form.password(placeholder="Enter Password", class_="form-control") }}
+                        <span class="error">
+                            {% if form.password.errors %}
+                                {% for error in form.password.errors %}
+                                     {{ error }}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        {{ form.confirm(placeholder="Confirm Password", class_="form-control") }}
+                        <span class="error">
+                            {% if form.confirm.errors %}
+                                {% for error in form.confirm.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <button type="submit" class="btn">Signup</button>
+                </form>
+
+            </div>
         </div>
-        <div class="input-group">
-            {{ form.email(placeholder="Email") }}
-            <span class="error">
-                {% if form.email.errors %}
-                    {% for error in form.email.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
-        </div>
-        <div class="input-group">
-            {{ form.password(placeholder="Password") }}
-            <span class="error">
-                {% if form.password.errors %}
-                    {% for error in form.password.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
-        </div>
-        <div class="input-group">
-            {{ form.confirm(placeholder="Confirm Password") }}
-            <span class="error">
-                {% if form.confirm.errors %}
-                    {% for error in form.confirm.errors %}
-                        {{ error }}
-                    {% endfor %}
-                {% endif %}
-            </span>
-        </div>
-        <button type="submit">Sign up</button>
-        <br>
-        <br>
-        <p>Already registered? <a href="/">Login</a></p>
-    </form>
+    </div>
 {% endblock %}

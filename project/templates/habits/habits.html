@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>You are logged in</h1>
-    <p>logout <a href={{ url_for('users.logout') }}>Logout</a></p>
+        <div class="container-fluid padding">
+        <div class="row welcome text-center">
+            <div class="col-12">
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+                <h1 class="display-4">You are logged in</h1>
+            </div>
+            <hr>
+            <div class="col-12">
+                <a href="{{ url_for('users.logout') }}" class="btn">Logout</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -6,12 +6,14 @@
                 {% for message in get_flashed_messages() %}
                     <div class="alert alert-success">{{ message }}</div>
                 {% endfor %}
-                <h1 class="display-4">Page Not Found!</h1>
+                <h1 class="display-4">Welcome to Habit Tracker</h1>
             </div>
             <hr>
             <div class="col-12">
-                <p class="lead">What you were looking for is just not here.</p>
-                <a href="{{ url_for('home_page') }}" class="btn">Return</a>
+                <p class="lead">Drop by drop is the water pot filled. -Buddha</p>
+                <p class="lead">Start tracking your daily habits and change your life today</p>
+                <a href="/login/" class="btn">Login</a>
+                <a href="/register/" class="btn">Signup</a>
             </div>
         </div>
     </div>

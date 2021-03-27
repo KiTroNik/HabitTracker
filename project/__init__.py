@@ -27,6 +27,11 @@ app.register_blueprint(users_blueprint)
 app.register_blueprint(habits_blueprint)
 
 
+@app.route('/')
+def home_page():
+    return render_template('home.html')
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('errors/404.html'), 404

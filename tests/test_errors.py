@@ -15,7 +15,7 @@ def client():
 
 class TestErrors:
     def test_setup(self, client):
-        response = client.get('/', follow_redirects=True)
+        response = client.get('/login/', follow_redirects=True)
         assert response.status_code == 200
         assert b'Please log in to access your habits' in response.data
 

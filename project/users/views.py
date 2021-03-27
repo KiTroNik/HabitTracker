@@ -8,7 +8,7 @@ from flask_login import login_required, login_user, logout_user
 users_blueprint = Blueprint('users', __name__)
 
 
-@users_blueprint.route('/', methods=['GET', 'POST'])
+@users_blueprint.route('/login/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     remember = True if form.remember_me.data else False
@@ -48,4 +48,4 @@ def register():
 def logout():
     logout_user()
     flash('Goodbye.')
-    return redirect(url_for('users.login'))
+    return redirect(url_for('home_page'))

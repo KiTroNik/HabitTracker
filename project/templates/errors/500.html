@@ -1,6 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Internal server error</h1>
-    <p>Sorry probably server is overloaded. Try again later.
-    <p><a href="{{ url_for('users.login') }}">Return to main page</a>
+        <div class="container-fluid padding">
+        <div class="row welcome text-center">
+            <div class="col-12">
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+                <h1 class="display-4">Internal server error!</h1>
+            </div>
+            <hr>
+            <div class="col-12">
+                <p class="lead">Sorry probably server is overloaded. Try again later.</p>
+                <a href="{{ url_for('home_page') }}" class="btn">Return</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
