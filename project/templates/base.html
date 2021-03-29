@@ -31,6 +31,11 @@
                     {% endif %}
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
+                            <a class="nav-link" href="/habits/">Habits</a>
+                        </li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
                             <a class="nav-link" href="/logout/">Logout</a>
                         </li>
                     {% endif %}

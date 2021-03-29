@@ -27,7 +27,7 @@ class Habit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     checked = db.Column(db.Boolean, nullable=False, default=False)
-    modify_date = db.Column(db.Date, nullable=False, default=datetime.datetime.utcnow())
+    modify_date = db.Column(db.Date, nullable=False)
     streak = db.Column(db.Integer, nullable=False, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
