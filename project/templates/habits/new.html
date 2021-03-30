@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="modal-dialog text-center">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        <div class="col-sm-8 main-section">
+            <div class="modal-content">
+                <form class="col-12" method="post" action={{ url_for('habits.add_habit') }}>
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        {{ form.name_of_habit(placeholder="Habit", class_="form-control") }}
+                        <span class="error">
+                            {% if form.name_of_habit.errors %}
+                                {% for error in form.name_of_habit.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <button type="submit" class="btn">Add habit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

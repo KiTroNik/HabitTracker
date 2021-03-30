@@ -6,11 +6,31 @@
                 {% for message in get_flashed_messages() %}
                     <div class="alert alert-success">{{ message }}</div>
                 {% endfor %}
-                <h1 class="display-4">You are logged in</h1>
+                <h1 class="display-4 tst">Your habits for today:</h1>
+                <a href="/add/" class="btn">Add Habit</a>
             </div>
             <hr>
             <div class="col-12">
-                <a href="{{ url_for('users.logout') }}" class="btn">Logout</a>
+                {% for habit in unchecked_habits %}
+                    <p class="lead tst">{{ habit.name }}</p>
+                    <a href="{{ url_for('habits.check', habit_id=habit.id) }}" class="btn">Check!</a>
+                    <a href="{{ url_for('habits.delete', habit_id=habit.id) }}" class="btn">Delete</a>
+                    <br>
+                    <br>
+                {% endfor %}
+            </div>
+
+            <div class="col-12">
+                <h1 class="display-4">Done today:</h1>
+            </div>
+            <hr>
+            <div class="col-12">
+                {% for habit in checked_habits %}
+                    <p class="lead tst">{{ habit.name }}</p>
+                    <a href="{{ url_for('habits.delete', habit_id=habit.id) }}" class="btn">Delete</a>  Streak: {{ habit.streak }}
+                    <br>
+                    <br>
+                {% endfor %}
             </div>
         </div>
     </div>
