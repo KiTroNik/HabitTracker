@@ -61,3 +61,9 @@ class TestUser:
         db.session.commit()
         user = User.query.filter_by(username='Johnny').first()
         assert user.__repr__() == "<User 'Johnny'>"
+
+    def test_user_cant_login_if_logged(self, client):
+        pass
+
+    def test_user_cant_register_if_logged(self, client):
+        pass

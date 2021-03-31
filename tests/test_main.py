@@ -23,3 +23,15 @@ class TestErrors:
         response = client.get('/not_exists', follow_redirects=True)
         assert response.status_code == 404
         assert b'What you were looking for is just not here.' in response.data
+
+    def test_home_page_if_user_logged_off(self, client):
+        pass
+
+    def test_navbar_if_user_logged_off(self, client):
+        pass
+
+    def test_home_page_changes_if_user_logged(self, client):
+        pass
+
+    def test_navbar_changes_if_user_logged(self, client):
+        pass

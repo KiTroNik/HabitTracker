@@ -2,6 +2,7 @@ import pytest
 from project import app, db, bcrypt
 from project.models import User, Habit
 from config import TestingConfig
+from datetime import date
 
 
 @pytest.fixture
@@ -34,3 +35,9 @@ def create_user(username, email, password):
     new_user = User(username=username, email=email, password=bcrypt.generate_password_hash(password))
     db.session.add(new_user)
     db.session.commit()
+
+
+def create_habit(client, name):
+    return client.post('/add/', data=dict(
+        name_of_habit=name,
+    ), follow_redirects=True)
