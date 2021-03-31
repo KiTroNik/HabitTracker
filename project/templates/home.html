@@ -12,8 +12,12 @@
             <div class="col-12">
                 <p class="lead">Drop by drop is the water pot filled. -Buddha</p>
                 <p class="lead">Start tracking your daily habits and change your life today</p>
-                <a href="/login/" class="btn">Login</a>
-                <a href="/register/" class="btn">Signup</a>
+                {% if current_user.is_authenticated %}
+                    <a href="/logout/" class="btn">Logout</a>
+                {% else %}
+                    <a href="/login/" class="btn">Login</a>
+                    <a href="/register/" class="btn">Signup</a>
+                {% endif %}
             </div>
         </div>
     </div>
