@@ -9,14 +9,16 @@ habits_blueprint = Blueprint('habits', __name__)
 
 
 def redefine_habits():
-    Habit.query.filter((Habit.modify_date + timedelta(days=1)) == date.today())\
+    Habit.query.filter(Habit.modify_date == date.today() - timedelta(days=1)) \
         .filter(Habit.user_id == current_user.id).update(
         {Habit.checked: False, Habit.modify_date: date.today()}
     )
-    Habit.query.filter((Habit.modify_date + timedelta(days=1)) > date.today())\
+
+    Habit.query.filter((Habit.modify_date != date.today() - timedelta(days=1)) and Habit.modify_date != date.today())\
         .filter(Habit.user_id == current_user.id).update(
         {Habit.checked: False, Habit.modify_date: date.today(), Habit.streak: 0}
     )
+
     db.session.commit()
 
 
@@ -47,7 +49,7 @@ def add_habit():
         new_habit = Habit(
             form.name_of_habit.data,
             False,
-            date.today() - timedelta(days=1),
+            date.today(),
             0,
             current_user.id
         )
