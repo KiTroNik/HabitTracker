@@ -1,17 +1,11 @@
-import pytest
-from project import app, db, bcrypt
-from project.models import User, Habit
-from config import TestingConfig
-
-
-@pytest.fixture
-def client():
-    app.config.from_object(TestingConfig)
-    db.create_all()
-    yield app.test_client()
-    db.session.remove()
-    db.drop_all()
+from .utils import *
 
 
 class TestHabit:
-    pass
+    def test_unlogged_users_cant_go_to_habit_page(self, client):
+        response = client.get('/habits/')
+        assert b'Your habits' not in response.data
+
+    def logged_users_can_go_to_habit_page(self, client):
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
