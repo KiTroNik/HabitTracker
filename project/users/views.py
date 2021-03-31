@@ -3,13 +3,17 @@ from .forms import LoginForm, RegisterForm
 from project.models import User
 from project import bcrypt, db
 from sqlalchemy.exc import IntegrityError
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 
 users_blueprint = Blueprint('users', __name__)
 
 
 @users_blueprint.route('/login/', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        flash('You are already logged in.')
+        return redirect(url_for('home_page'))
+
     form = LoginForm()
     remember = True if form.remember_me.data else False
     if request.method == 'POST' and form.validate():
@@ -25,6 +29,10 @@ def login():
 
 @users_blueprint.route('/register/', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        flash('You are already logged in.')
+        return redirect(url_for('home_page'))
+
     form = RegisterForm()
     if request.method == 'POST' and form.validate():
         new_user = User(
