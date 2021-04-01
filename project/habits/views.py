@@ -64,7 +64,7 @@ def add_habit():
 @login_required
 def check(habit_id):
     habit = Habit.query.filter_by(id=habit_id)
-    if current_user.id == habit.first().user_id:
+    if current_user.id == habit.first().user_id and not habit.first().checked:
         habit.update({'checked': True, 'modify_date': date.today(), 'streak': habit.first().streak + 1})
         db.session.commit()
         flash("Keep it up!")
