@@ -1,7 +1,4 @@
-import pytest
-from project import app, db, bcrypt
-from project.models import User
-from config import TestingConfig
+from .utils import *
 
 
 @pytest.fixture
@@ -13,7 +10,7 @@ def client():
     db.drop_all()
 
 
-class TestErrors:
+class TestMain:
     def test_home_page_shows(self, client):
         response = client.get('/')
         assert response.status_code == 200
@@ -25,13 +22,24 @@ class TestErrors:
         assert b'What you were looking for is just not here.' in response.data
 
     def test_home_page_if_user_logged_off(self, client):
-        pass
+        response = client.get('/', follow_redirects=True)
+        assert b'Login' in response.data
+        assert b'Signup' in response.data
 
     def test_navbar_if_user_logged_off(self, client):
-        pass
+        response = client.get('/', follow_redirects=True)
+        assert b'Home' in response.data
 
     def test_home_page_changes_if_user_logged(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        response = client.get('/', follow_redirects=True)
+        assert b'Login' not in response.data
+        assert b'Signup' not in response.data
+        assert b'Logout' in response.data
 
     def test_navbar_changes_if_user_logged(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        response = client.get('/', follow_redirects=True)
+        assert b'Habits' in response.data

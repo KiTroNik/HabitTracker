@@ -62,8 +62,14 @@ class TestUser:
         user = User.query.filter_by(username='Johnny').first()
         assert user.__repr__() == "<User 'Johnny'>"
 
-    def test_user_cant_login_if_logged(self, client):
-        pass
+    def test_user_cant_login_again_if_logged(self, client):
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        response = client.get('/login/', follow_redirects=True)
+        assert b'Login' not in response.data
 
     def test_user_cant_register_if_logged(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        response = register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        assert b'Thank you for registering. Please log in.' not in response.data

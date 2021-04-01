@@ -1,4 +1,6 @@
 from .utils import *
+from freezegun import freeze_time
+from datetime import date, timedelta
 
 
 class TestHabit:
@@ -33,34 +35,109 @@ class TestHabit:
         assert b'New habit created successfully' in response.data
 
     def test_unlogged_users_cant_delete_habits(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        logout(client)
+        response = client.get('/delete/1', follow_redirects=True)
+        assert b'We hope this habit will stay in your life forever.' not in response.data
 
     def test_logged_users_can_delete_habits(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        response = client.get('/delete/1', follow_redirects=True)
+        assert b'We hope this habit will stay in your life forever.' in response.data
 
     def test_unlogged_users_cant_check_habits(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        logout(client)
+        response = client.get('/check/1', follow_redirects=True)
+        assert b'Keep it up!' not in response.data
 
     def test_logged_users_can_check_habits(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        response = client.get('/check/1', follow_redirects=True)
+        assert b'Keep it up!' in response.data
 
-    def test_logged_users_see_only_own_habits(self, client):
-        pass
+    def test_logged_users_see_own_habits(self, client):
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        response = create_habit(client, 'some habit')
+        assert b'some habit' in response.data
+
+    def test_logged_users_dont_see_others_habits(self, client):
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        logout(client)
+        register(client, 'Wojciech', 'suchodolski@wp.pl', 'szkolna17', 'szkolna17')
+        response = login(client, 'Wojciech', 'szkolna17')
+        assert b'some habit' not in response.data
 
     def test_user_can_delete_only_own_habits(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        logout(client)
+        register(client, 'Wojciech', 'suchodolski@wp.pl', 'szkolna17', 'szkolna17')
+        login(client, 'Wojciech', 'szkolna17')
+        response = client.get('/delete/1', follow_redirects=True)
+        assert b'We hope this habit will stay in your life forever.' not in response.data
 
     def test_user_can_check_only_own_habits(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        logout(client)
+        register(client, 'Wojciech', 'suchodolski@wp.pl', 'szkolna17', 'szkolna17')
+        login(client, 'Wojciech', 'szkolna17')
+        response = client.get('/check/1', follow_redirects=True)
+        assert b'Keep it up!' not in response.data
 
     def test_habit_can_be_checked_only_once_a_day(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        response = client.get('/check/1', follow_redirects=True)
+        assert b'Check!' not in response.data
 
     def test_habit_streak_is_incrementing(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        response = client.get('/check/1', follow_redirects=True)
+        assert b'Streak: 1' in response.data
 
     def test_habit_is_uncheked_every_day(self, client):
-        pass
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        client.get('/check/1', follow_redirects=True)
+        with freeze_time(date.today() + timedelta(days=1)):
+            response = client.get('/habits/', follow_redirects=True)
+            assert b'Check!' in response.data
 
     def test_habit_streak_is_reseted_after_more_than_one_day_user_unchecked(self, client):
-        pass
+        register(client, 'Johnn', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'Johnn', 'mysecret')
+        create_habit(client, 'some habit')
+        client.get('/check/1', follow_redirects=True)
+        with freeze_time(date.today() + timedelta(days=3)):
+            client.get('/habits/', follow_redirects=True)
+            response = client.get('/check/1', follow_redirects=True)
+            assert b'Streak: 1' in response.data
+
+    def test_habit_streak_is_not_reseted_after_one_day_user_unchecked(self, client):
+        register(client, 'Johnn', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'Johnn', 'mysecret')
+        create_habit(client, 'some habit')
+        client.get('/check/1', follow_redirects=True)
+        with freeze_time(date.today() + timedelta(days=1)):
+            client.get('/habits/', follow_redirects=True)
+            response = client.get('/check/1', follow_redirects=True)
+            assert b'Streak: 2' in response.data
