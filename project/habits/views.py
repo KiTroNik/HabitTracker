@@ -34,10 +34,12 @@ def unchecked_habits():
 @login_required
 def habits():
     redefine_habits()
+    unchecked = unchecked_habits()
     return render_template(
         'habits/habits.html',
         checked_habits=checked_habits(),
-        unchecked_habits=unchecked_habits()
+        unchecked_habits=unchecked,
+        count=unchecked.count()
     )
 
 

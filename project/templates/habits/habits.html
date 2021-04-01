@@ -11,6 +11,10 @@
             </div>
             <hr>
             <div class="col-12">
+                {% if count == 0 %}
+                    <p class="lead">There is no habits. Come back tommorow or add a habit.</p>
+                {% endif %}
+
                 {% for habit in unchecked_habits %}
                     <p class="lead tst">{{ habit.name }}</p>
                     <a href="{{ url_for('habits.check', habit_id=habit.id) }}" class="btn">Check!</a>
@@ -18,6 +22,7 @@
                     <br>
                     <br>
                 {% endfor %}
+
             </div>
 
             <div class="col-12">

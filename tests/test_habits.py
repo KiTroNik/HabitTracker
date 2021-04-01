@@ -14,6 +14,19 @@ class TestHabit:
         response = client.get('/habits/')
         assert b'Your habits' in response.data
 
+    def test_if_there_is_no_habits_comment_is_visible(self, client):
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        response = client.get('/habits/')
+        assert b'There is no habits. Come back tommorow or add a habit.' in response.data
+
+    def test_if_there_are_habits_comment_is_not_visible(self, client):
+        register(client, 'John', 'johndoe@wp.pl', 'mysecret', 'mysecret')
+        login(client, 'John', 'mysecret')
+        create_habit(client, 'some habit')
+        response = client.get('/habits/')
+        assert b'There is no habits. Come back tommorow or add a habit.' not in response.data
+
     def test_unlogged_users_cant_see_create_habit_form(self, client):
         response = client.get('/add/')
         assert b'Add habit' not in response.data
