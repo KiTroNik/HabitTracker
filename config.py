@@ -7,7 +7,10 @@ class Config(object):
 
 
 class ProductionConfig(Config):
+    basedir = os.path.abspath(os.path.dirname(__file__))
     SECRET_KEY = "\xe8\xe7\xe9\xc2T\xf5\x97\xfaTB^\xcc'O\xc8x"
+    DATABASE = 'database.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'database.db')
 
 
 class DevelopmentConfig(Config):

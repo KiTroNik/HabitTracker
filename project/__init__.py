@@ -1,11 +1,11 @@
 from flask import Flask, render_template
-from config import DevelopmentConfig
+from config import DevelopmentConfig, ProductionConfig
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 app = Flask(__name__)
-app.config.from_object(DevelopmentConfig)
+app.config.from_object(ProductionConfig)
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
