@@ -2,7 +2,6 @@
 
 ## General info
 Welcome to an application where you can track your daily habits.
-Live version: https://habit-trackerr.herokuapp.com/
 	
 ## Technologies
 The technologies I am using to create this app:
